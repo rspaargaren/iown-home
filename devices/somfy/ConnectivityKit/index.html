@@ -1,0 +1,1868 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="io-homecontrol Documentation &amp; Implementation">
+      
+      
+        <meta name="author" content="Velocet">
+      
+      
+        <link rel="canonical" href="https://velocet.github.io/iown-homecontrol/devices/somfy/ConnectivityKit/">
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.20">
+    
+    
+      
+        <title>Somfy - Connectivity Kit - iown-homecontrol</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="../../../assets/external/fonts.googleapis.com/css.bfe0d362.css">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Source Code Pro"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/timeago.css">
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Somfy - Connectivity Kit - iown-homecontrol" >
+      
+        <meta  property="og:description"  content="io-homecontrol Documentation &amp; Implementation" >
+      
+        <meta  property="og:image"  content="https://velocet.github.io/iown-homecontrol/assets/images/social/devices/somfy/ConnectivityKit/README.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://velocet.github.io/iown-homecontrol/devices/somfy/ConnectivityKit/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Somfy - Connectivity Kit - iown-homecontrol" >
+      
+        <meta  name="twitter:description"  content="io-homecontrol Documentation &amp; Implementation" >
+      
+        <meta  name="twitter:image"  content="https://velocet.github.io/iown-homecontrol/assets/images/social/devices/somfy/ConnectivityKit/README.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="grey" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#somfy-connectivity-kit" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://velocet.github.io/iown-homecontrol" title="iown-homecontrol" class="md-header__button md-logo" aria-label="iown-homecontrol" data-md-component="logo">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            iown-homecontrol
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Somfy - Connectivity Kit
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/velocet/iown-homecontrol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  ⌂
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../RADIO.md" class="md-tabs__link">
+          
+  
+  Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../DEVICES.md" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../RADIO-RTLSDR/" class="md-tabs__link">
+          
+  
+  misc
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://velocet.github.io/iown-homecontrol" title="iown-homecontrol" class="md-nav__button md-logo" aria-label="iown-homecontrol" data-md-component="logo">
+      
+  <img src="../../../assets/images/favicon.png" alt="logo">
+
+    </a>
+    iown-homecontrol
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/velocet/iown-homecontrol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ⌂
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../RADIO.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Layer 1
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LINKLAYER.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Layer 2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../COMMANDS/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../PARAMETER/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEVICES.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Devices
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../FIRMWARE.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Firmware
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    misc
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            misc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../RADIO-RTLSDR/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RTL-SDR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../RADIO-CC1021/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CC1021
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/velocet/iown-homecontrol/blog/main/docs/devices/somfy/ConnectivityKit/README.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="somfy-connectivity-kit">Somfy - Connectivity Kit<a class="headerlink" href="#somfy-connectivity-kit" title="Permanent link">&para;</a></h1>
+<p>Analysis and Information about the Board Layout, PIN Definitions and ongoing efforts to understand the platform.</p>
+<pre class="mermaid"><code>---
+title: Somfy - Connectivity Kit Schema
+---
+%%{init:{
+  "theme": "neutral",
+  "fontFamily": "monospace",
+  "flowchart": {"curve": "linear"}}
+}%%
+
+flowchart LR
+subgraph minikiz["Somfy Connectivity Kit"]
+  direction LR
+  subgraph iohc["io-homecontrol"]
+    direction TB
+    stm32{"STM32&lt;br&gt;F101RC"}&lt;--"UART"--&gt;si4461{{"Si 4461"}}
+    click si4461 "../../datasheets/silabs-si4461.pdf" "Si 4461 Datasheet"
+    click stm32 "../../datasheets/stm32-f101rc.pdf" "STM32 F101xC Datasheet"
+  end
+  subgraph wrover["ESP32 WROVER-E N8R8 - 2.1"]
+    direction TB
+    esp32{"ESP32&lt;br/&gt;D0WD-V3"}
+    ram[["8 MB&lt;br/&gt;RAM&lt;br/&gt;(PSRAM64H)"]]
+    rom[["8 MB&lt;br/&gt;ROM&lt;br/&gt;(XM25QH64C)"]]
+    esp32&lt;--"SPI"--&gt;ram
+    esp32&lt;--"SPI"--&gt;rom
+    click esp32 "../../datasheets/ESP32/esp32-wrover-e-datasheet.pdf"
+    click ram "../../datasheets/ESP32/PSRAM64H.pdf"
+    click rom "../../datasheets/ESP32/XM25QH64C.pdf"
+  end
+  subgraph rts["RTS"]
+    direction TB
+    sx1243{{"SX 1243"}}
+    click sx1243 "../../datasheets/semtech/sx1243.pdf"
+  end
+  iohc&lt;--"SPI"--&gt;wrover--"TWI&lt;br/&gt;(I2C)"--&gt;rts
+end</code></pre>
+<blockquote>
+<p><strong>NOTE</strong>: When referencing PCB directions it is always assumed that we are looking at the top of the PCB with the buttons facing towards you like in the pictures.</p>
+</blockquote>
+<h2 id="pin-layout">Pin Layout<a class="headerlink" href="#pin-layout" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>NOTE</strong>: When refering to Pins their Naming Scheme is used and not their actual number on the board itself since this makes mapping to source code and documentation easier ;)</p>
+</blockquote>
+<h3 id="esp32-wrover-e-module">ESP32 Wrover-E Module<a class="headerlink" href="#esp32-wrover-e-module" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Note</strong>: <a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/gpio.html#gpio-summary">ESP32 GPIO Summary</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">ESP32<br>GPIO</th>
+<th style="text-align: center;">STM32<br>PIN</th>
+<th style="text-align: center;">DBG<br>PIN</th>
+<th style="text-align: center;">FUNCTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>LEFT</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>ESP32 LEFT ROW: 1 - 19</strong> (Top&gt;Bottom)</td>
+</tr>
+<tr>
+<td style="text-align: center;">GND</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">3V3</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">EN</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">ChipEnable / Reset</td>
+</tr>
+<tr>
+<td style="text-align: center;">VP</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">Button:<code>Prog</code></td>
+<td style="text-align: center;">Button: Right Side</td>
+</tr>
+<tr>
+<td style="text-align: center;">VN</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">DBG:1</td>
+<td style="text-align: center;">Bridge Point 1</td>
+</tr>
+<tr>
+<td style="text-align: center;">34</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">DBG:2</td>
+<td style="text-align: center;">Bridge Point 2</td>
+</tr>
+<tr>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">DBG:3</td>
+<td style="text-align: center;">Bridge Point 3</td>
+</tr>
+<tr>
+<td style="text-align: center;">32</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">LED</td>
+<td style="text-align: center;">LED:Green</td>
+</tr>
+<tr>
+<td style="text-align: center;">33</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">LED</td>
+<td style="text-align: center;">nc?</td>
+</tr>
+<tr>
+<td style="text-align: center;">25</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">LED</td>
+<td style="text-align: center;">LED:White</td>
+</tr>
+<tr>
+<td style="text-align: center;">26</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">:grey_question:</td>
+<td style="text-align: center;">Debug Port with missing Chip (UART?)</td>
+</tr>
+<tr>
+<td style="text-align: center;">27</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">:grey_question:</td>
+<td style="text-align: center;">Debug Port with missing Chip (UART?)</td>
+</tr>
+<tr>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">42<code>TX</code></td>
+<td style="text-align: center;">DBG:Rx</td>
+<td style="text-align: center;"><code>HSPI_CK</code>/ <code>JTAG TDMS</code> - TestArea3-Bottom</td>
+</tr>
+<tr>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">LED</td>
+<td style="text-align: center;"><code>HSPI_Q</code> / <code>JTAG TDDI</code> - LED-BlueWiFi<br><em>Strap</em>: LOW for Boot Mode: "<em>should be kept low when module is on.</em>"</td>
+</tr>
+<tr>
+<td style="text-align: center;">GND</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">RTS</td>
+<td style="text-align: center;"><code>HSPI_DATA</code>  / <code>JTAG CK</code> - RTS:6CTRL</td>
+</tr>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>RIGHT</strong></td>
+<td style="text-align: center;"><strong>STM32</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>ESP32 RIGHT ROW: 20 - 38</strong> (Top&gt;Bottom)</td>
+</tr>
+<tr>
+<td style="text-align: center;">GND</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">Button/LED</td>
+<td style="text-align: center;"><code>VSPI DATA</code> - Button and LED</td>
+</tr>
+<tr>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">RTS</td>
+<td style="text-align: center;"><code>UART RTS / VSPI WP</code> - UpRight-Left<br>RTS:2DATA</td>
+</tr>
+<tr>
+<td style="text-align: center;">TXD</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">UART:Tx</td>
+<td style="text-align: center;"><code>UART TX</code> - UpRight-Right<br><em>Strap</em>: Debug Output</td>
+</tr>
+<tr>
+<td style="text-align: center;">RXD</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">UART:Rx</td>
+<td style="text-align: center;"><code>UART RX</code> - UpRight-Middle<br><em>Strap</em>: HIGH at Boot Mode</td>
+</tr>
+<tr>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">DBG:Unknown</td>
+<td style="text-align: center;"><code>VSPI HD</code> - Debug RightSide of ESP with 3 Contacts (Top)<br>Function Unknown. Could be used in conjunction with IO2 to select Boot Mode</td>
+</tr>
+<tr>
+<td style="text-align: center;">nc</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">nc</td>
+</tr>
+<tr>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">RTS</td>
+<td style="text-align: center;"><code>VSPI Q</code> / <code>UART CTS</code> - RTS:5RST</td>
+</tr>
+<tr>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;"><code>BOOT0</code></td>
+<td style="text-align: center;">STM32:BootMode</td>
+<td style="text-align: center;"><code>VSPI CLK</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">UNCORRECT:<code>Reset</code></td>
+<td style="text-align: center;"><code>VSPI CS</code> - <em>Strap</em>: 0 = BootMode</td>
+</tr>
+<tr>
+<td style="text-align: center;">nc</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">nc</td>
+</tr>
+<tr>
+<td style="text-align: center;">nc</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">nc</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;"><code>RESET</code></td>
+<td style="text-align: center;">Button:???/SWD</td>
+<td style="text-align: center;"><code>HSPI HD=HOLD</code> Button: Left Side / SWD:1RST</td>
+</tr>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">Strap</td>
+<td style="text-align: center;"><code>CLK OUT</code> - Test2-Middle<br><em>Strap</em>: 0 = BootMode</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">Strap</td>
+<td style="text-align: center;"><code>HSPI WP=WriteProtect</code> - Test1-Middle<br><em>Strap</em>: 0 = BootMode</td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">43<code>RX</code></td>
+<td style="text-align: center;">DBG:Tx</td>
+<td style="text-align: center;"><code>HSPI CS</code> / <code>JTAG DO</code> - Test3-Top<br><em>Strap</em>: 1 = Debug Log @ <code>UART TX</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note</strong>: ESP32 has two I2C channels. Any pin can be set as SDA or SC.
+<a href="https://randomnerdtutorials.com/esp32-spi-communication-arduino/">Good SPI Explanation</a>
+<a href="https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html">ESP32: Boot Mode Selection</a></p>
+<p><strong>Note</strong>: LED Info could also be found here: https://github.com/Overkiz/esp-idf/commit/b553be8a5d074ec39fa5e2beac14c99eb4932388
+<strong>Note</strong>: It seems Overkiz is using the official ESP bootloader and WebIOPi (Python) to test this (or the STM32) via Serial</p>
+</blockquote>
+<details><summary>ESP32 WROVER-E (ESP32-D0WD-V3) GPIO Summary</summary>
+
+| GPIO    | STRAP | Comments           |
+| ------: | :---: | :----------------- |
+| 00      | 1     | CLK_OUT1           |
+| `VSPI`  |       | `VSPI`             |
+| 05      | 1     | VSPICS             |
+| 18      |       | VSPICLK            |
+| 21      |       | VSPIHDA            |
+| 23      |       | VSPIDAT            |
+| 19      |       | VSPIQPI; U0CTS     |
+| 22      |       | VSPIWPT; U0RTS     |
+| `HSPI`  |       | `HSPI`             |
+| 02      | 0     | HSPIWP             |
+| 04      |       | HSPIHDA            |
+| 12      | 0     | JTAG:MTDI; HSPIQPI |
+| 15      | 1     | JTAG:MTDO; HSPICS  |
+| 13      |       | JTAG:MTCK; HSPIDAT |
+| 14      |       | JTAG:MTMS; HSPICLK |
+| 01      |       | U0TXD; CLK_OUT3    |
+| 03      |       | U0RXD; CLK_OUT2    |
+| `NoDef` |       | `NO DEFINITION`    |
+| 25-27   |       |                    |
+| 32-33   |       |                    |
+| `GPI`   |       | `INPUT ONLY`       |
+| 34-35   |       | GPI                |
+| 36      |       | GPI; SENSOR_VP     |
+| 37-38   |       | GPI                |
+| 39      |       | GPI; SENSOR_VN     |
+| `N/A`   |       | `NOT USABLE`       |
+| 06-11   |       | SPI0/1; ROM        |
+| 16-17   |       | SPI0/1; RAM        |
+
+- **Note**: GPIO34-39 are input only and have no software-enabled pull-up/down!
+
+</details>
+
+<h3 id="sx1243-pin-out-rts">SX1243 Pin Out (RTS)<a class="headerlink" href="#sx1243-pin-out-rts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SX1243 Interface: TWI = I2C</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">SX1243</th>
+<th style="text-align: center;">ESP32</th>
+<th style="text-align: center;">DBG<br>PIN</th>
+<th style="text-align: center;">FUNCTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">6: <code>CTRL</code></td>
+<td style="text-align: center;">IO13:<code>HSPI D</code></td>
+<td style="text-align: center;">I2C</td>
+<td style="text-align: center;">Data</td>
+</tr>
+<tr>
+<td style="text-align: center;">2: <code>DATA</code></td>
+<td style="text-align: center;">IO22:<code>VSPI WP</code></td>
+<td style="text-align: center;">I2C</td>
+<td style="text-align: center;">Chip Select</td>
+</tr>
+<tr>
+<td style="text-align: center;">5: <code>nRESET</code></td>
+<td style="text-align: center;">IO19:<code>VSPI Q</code></td>
+<td style="text-align: center;">RESET</td>
+<td style="text-align: center;">Reset</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note</strong>: On bigger boards the <code>sel</code> Pin is used to set the freq as shown in this example</p>
+</blockquote>
+<div class="language-SHELL highlight"><span class="filename">Bash</span><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">sel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pioB<span class="w"> </span><span class="m">14</span><span class="w"> </span><span class="nv">0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">433920000</span><span class="w"> </span><span class="c1"># Not Always connected</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">sel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>pioB<span class="w"> </span><span class="m">14</span><span class="w"> </span><span class="nv">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">433420000</span><span class="w"> </span><span class="c1"># Not Always connected</span>
+</code></pre></div>
+<h3 id="stm32-pin-out">STM32 Pin Out<a class="headerlink" href="#stm32-pin-out" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">STM32</th>
+<th style="text-align: center;">Si4462</th>
+<th style="text-align: center;">ESP32</th>
+<th style="text-align: center;">DBG</th>
+<th style="text-align: left;">FUNCTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>RIGHT</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TST</td>
+<td style="text-align: left;">Can be shorted with 6</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TST</td>
+<td style="text-align: left;">Can be shorted with 5</td>
+</tr>
+<tr>
+<td style="text-align: left;">7:<code>RST</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">IO4:<code>io_reset</code></td>
+<td style="text-align: center;">SWD1:</td>
+<td style="text-align: left;">Reset</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TOP</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">12:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;">Boot Mode Selection</td>
+</tr>
+<tr>
+<td style="text-align: left;">13:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;">Boot Mode Selection</td>
+</tr>
+<tr>
+<td style="text-align: left;">17:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;">Boot Mode Selection</td>
+</tr>
+<tr>
+<td style="text-align: left;">19:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;">Boot Mode Selection</td>
+</tr>
+<tr>
+<td style="text-align: left;">20:<code>NSS1</code></td>
+<td style="text-align: center;">15: <code>SEL</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: left;"><code>SPI1 NSS</code> &lt;&gt; Si4461: <code>SEL</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">21:<code>CKL1</code></td>
+<td style="text-align: center;">12: <code>CLK</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: left;"><code>SPI1 CLK</code> &lt;&gt; Si4461: <code>CLK</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">22:<code>MISO1</code></td>
+<td style="text-align: center;">13: <code>SDO</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: left;"><code>SPI1 MISO</code> &lt;&gt; Si4461: <code>SDO</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">23:<code>MOSI1</code></td>
+<td style="text-align: center;">14: <code>SDI</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: left;"><code>SPI1 MOSI</code> &lt;&gt; Si4461: <code>SDI</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">28:<code>BOOT1</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><code>io_boot_1</code></td>
+<td style="text-align: left;">Boot Mode Selection<br/><strong>NOTE</strong>: <code>10k Pull Down Resistor</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">29:<code>SCL</code></td>
+<td style="text-align: center;">20: <code>GPIO3</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"><code>GPIO3</code> &lt;&gt; USART3_TX / SCL</td>
+</tr>
+<tr>
+<td style="text-align: left;">30:<code>SDA</code></td>
+<td style="text-align: center;">19: <code>GPIO2</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"><code>GPIO2</code> &lt;&gt; USART3_RX / SDA</td>
+</tr>
+<tr>
+<td style="text-align: left;">31:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">32:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LEFT</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">33</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">MODE_SEL</td>
+<td style="text-align: left;">SPI2_NSS  / USART3_CK  / SMBA</td>
+</tr>
+<tr>
+<td style="text-align: left;">34</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">MODE_SEL</td>
+<td style="text-align: left;">SPI2_SCK  / USART3_CTS</td>
+</tr>
+<tr>
+<td style="text-align: left;">35</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">MODE_SEL</td>
+<td style="text-align: left;">SPI2_MISO / USART3_RTS</td>
+</tr>
+<tr>
+<td style="text-align: left;">38</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">MODE_SEL</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">41:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">42:<code>TXD1</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">IO14:<code>io_usart_tx</code></td>
+<td style="text-align: center;">USART</td>
+<td style="text-align: left;">USART1_TX</td>
+</tr>
+<tr>
+<td style="text-align: left;">43:<code>RXD1</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">IO15:<code>io_usart_rx</code></td>
+<td style="text-align: center;">USART</td>
+<td style="text-align: left;">USART1_RX</td>
+</tr>
+<tr>
+<td style="text-align: left;">46</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SWD5:</td>
+<td style="text-align: left;">JTMS-SWDIO (PA13)</td>
+</tr>
+<tr>
+<td style="text-align: left;">48:<code>?</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BOTTOM</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">49</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SWD4:CLK</td>
+<td style="text-align: left;">JTCK-SWCLK (PA14)</td>
+</tr>
+<tr>
+<td style="text-align: left;">50</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SWD2:DI</td>
+<td style="text-align: left;">JTDI / SPI3_NSS (PA15)</td>
+</tr>
+<tr>
+<td style="text-align: left;">55</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SWD3:DO</td>
+<td style="text-align: left;">JTDO (PB3)</td>
+</tr>
+<tr>
+<td style="text-align: left;">56</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">SWD6:RST</td>
+<td style="text-align: left;">NJTRST (PB4)</td>
+</tr>
+<tr>
+<td style="text-align: left;">60:<code>BOOT0</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">IO18:<code>io_boot_0</code></td>
+<td style="text-align: center;">BOOT_SEL</td>
+<td style="text-align: left;">Boot Mode Selection</td>
+</tr>
+<tr>
+<td style="text-align: left;">62</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">MODE_SEL</td>
+<td style="text-align: left;">Switch: Left</td>
+</tr>
+</tbody>
+</table>
+<!-- 3 PINS FOR UART COMMUNICATION -->
+
+<p>Known PIN Names extracted from DTBs (AT91) for the STM32 with iohc firmware:
+- PB30 io_reset      pioA       = Standard PIN
+- PC09 io_test_radio pioA  HIGH
+- PC11 io_boot_0     pioA  HIGH = Standard PIN
+- PC17 io_boot_1     pioA  HIGH = Standard PIN</p>
+<p>The STM32 firmware knows different "modes" which it can recognize. This information was gathered from the KizOs images.
+Since there are at least four unknown Pins that could be bridged i would assume that</p>
+<p>serial rf
+  at91-gpio PA2 = 0
+  at91-gpio PA3 = TEST_RADIO: 1
+  at91-gpio PA5 = BOOT0:      0
+  at91-gpio PA6 = BOOT1:      0</p>
+<pre class="mermaid"><code>---
+title: Somfy Connectivity Kit - Serial Wire JTAG Debug Port (SWJ-DP)
+---
+%%{init:{"theme": "neutral","fontFamily":"monospace","flowchart":{"curve":"linear"}}}%%
+stateDiagram
+  direction LR
+
+  classDef stm32Pin fill:white
+  classDef headerPin fill:grey
+  class PIN07_RST,PIN50_PA15,PIN55_PB3,PIN49_PA14,PIN46_PA13,PIN56_PB4,NC,GROUND,PIN64 headerPin
+  class RESET,JTDI,JTDO_TRACESWO,JTCK_SWCLK,JTMS_SWDIO,JTRST,VDD_3 stm32Pin
+
+  state "Somfy Connectivity Kit: Serial Wire JTAG Debug Port (SWJ-DP)" as Debug_Header
+  state Debug_Header {
+
+  state Left_Row {
+    direction LR
+    PIN07_RST --&gt; RESET
+    PIN50_PA15 --&gt; JTDI
+    PIN55_PB3 --&gt; JTDO_TRACESWO
+    PIN49_PA14 --&gt; JTCK_SWCLK
+    PIN46_PA13 --&gt; JTMS_SWDIO
+  }
+
+  state Right_Row {
+    direction LR
+    PIN56_PB4 --&gt; JTRST
+    NC --&gt; 07_NC
+    GROUND --&gt; 08_GND
+    GROUND --&gt; 09_GND
+    PIN64 --&gt; VDD_3
+  }
+}</code></pre>
+<h3 id="si446x-pin-out">Si446x Pin Out<a class="headerlink" href="#si446x-pin-out" title="Permanent link">&para;</a></h3>
+<p>Interface: SPI</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Si4462</th>
+<th style="text-align: center;">STM32</th>
+<th style="text-align: center;">DBG</th>
+<th style="text-align: center;">FUNCTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">9:<code>IO0</code></td>
+<td style="text-align: center;">TODO</td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: center;">See <code>GPIO_PIN_CFG</code><br/><strong>NOTE</strong>: Could be shorted with 11:<code>nIRQ</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">11:<code>nIRQ</code></td>
+<td style="text-align: center;">See 9:IO0</td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: center;">See <code>GPIO_PIN_CFG</code><br/><strong>NOTE</strong>: Could be shorted with 9:<code>IO0</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">12:<code>SCL</code></td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: center;"><code>CLK</code>  &lt;&gt; Si4461_<code>CLK</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">13:<code>SDO</code></td>
+<td style="text-align: center;">22</td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: center;"><code>MISO</code> &lt;&gt; Si4461_<code>SDO</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">14:<code>SDI</code></td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: center;"><code>MOSI</code> &lt;&gt; Si4461_<code>SDI</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">15: <code>SEL</code></td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">SPI</td>
+<td style="text-align: center;"><code>NSS</code>  &lt;&gt; Si4461_<code>nSEL</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">16: <code>XOUT</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">XTAL</td>
+<td style="text-align: center;">26 MHz</td>
+</tr>
+<tr>
+<td style="text-align: right;">17: <code>XIN</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">XTAL</td>
+<td style="text-align: center;">26 MHz</td>
+</tr>
+<tr>
+<td style="text-align: right;">19: <code>IO2</code></td>
+<td style="text-align: center;">30</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">See <code>GPIO_PIN_CFG</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">20: <code>IO3</code></td>
+<td style="text-align: center;">29</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">See <code>GPIO_PIN_CFG</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">1: <code>SDN</code></td>
+<td style="text-align: center;">17</td>
+<td style="text-align: center;">PWR</td>
+<td style="text-align: center;">Shutdown</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>GPIO are configured by the GPIO_PIN_CFG command in address 13h
+Complete list of the GPIO options in the API guide
+GPIO pins 0 and 1 should be used for active signals such as data or clock
+GPIO pins 2 and 3 have more susceptibility to generating spurious in the synthesizer than pins 0 and 1</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;"></th>
+<th style="text-align: right;">SERIAL</th>
+<th style="text-align: right;">I2C</th>
+<th style="text-align: right;">SPI</th>
+<th>DESC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">Clock</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">SCL</td>
+<td style="text-align: right;">SCK/SCLK</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">Data</td>
+<td style="text-align: right;">TX</td>
+<td style="text-align: right;">SDA</td>
+<td style="text-align: right;">SDI/MOSI</td>
+<td>MasterOutSlaveIn</td>
+</tr>
+<tr>
+<td style="text-align: right;">Data</td>
+<td style="text-align: right;">RX</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">SDO/MISO</td>
+<td>MasterInSlaveOut</td>
+</tr>
+<tr>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">CE/nSS/nCS</td>
+<td>ChipEnable/SlaveSelect/ChipSelect</td>
+</tr>
+<tr>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">WP</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td>WriteProtect</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bootloader">Bootloader<a class="headerlink" href="#bootloader" title="Permanent link">&para;</a></h3>
+<p>Bootloader messages from my somewhat broken board...</p>
+<div class="language-GO highlight"><span class="filename">Go</span><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="mi">13</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">290</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">ets</span><span class="w"> </span><span class="nx">Jul</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">2019</span><span class="w"> </span><span class="mi">12</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">46</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="mi">13</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">290</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="mi">13</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">290</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">rst</span><span class="p">:</span><span class="mh">0x0</span><span class="w"> </span><span class="p">(</span><span class="nx">NO_MEAN</span><span class="p">),</span><span class="nx">boot</span><span class="p">:</span><span class="mh">0x0</span><span class="w"> </span><span class="p">(</span><span class="nx">DOWNLOAD_BOOT</span><span class="p">(</span><span class="nx">UART0</span><span class="o">/</span><span class="nx">UART1</span><span class="o">/</span><span class="nx">SDIO_FEI_FEO_V2</span><span class="p">))</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="mi">13</span><span class="p">:</span><span class="mi">38</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">306</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">ets_main</span><span class="p">.</span><span class="nx">c</span><span class="w"> </span><span class="mi">404</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">557</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">ets</span><span class="w"> </span><span class="nx">Jul</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">2019</span><span class="w"> </span><span class="mi">12</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">46</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">557</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">557</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">rst</span><span class="p">:</span><span class="mh">0x1</span><span class="w"> </span><span class="p">(</span><span class="nx">POWERON_RESET</span><span class="p">),</span><span class="nx">boot</span><span class="p">:</span><span class="mh">0x13</span><span class="w"> </span><span class="p">(</span><span class="nx">SPI_FAST_FLASH_BOOT</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">563</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">configsip</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">SPIWP</span><span class="p">:</span><span class="mh">0xee</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">565</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">clk_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">q_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">d_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">cs0_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">hd_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">wp_drv</span><span class="p">:</span><span class="mh">0x00</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">570</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">mode</span><span class="p">:</span><span class="nx">DIO</span><span class="p">,</span><span class="w"> </span><span class="nx">clock</span><span class="w"> </span><span class="nx">div</span><span class="p">:</span><span class="mi">2</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">573</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">load</span><span class="p">:</span><span class="mh">0x3fff0018</span><span class="p">,</span><span class="nx">len</span><span class="p">:</span><span class="mi">4</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">576</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">load</span><span class="p">:</span><span class="mh">0x3fff001c</span><span class="p">,</span><span class="nx">len</span><span class="p">:</span><span class="mi">7960</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">579</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">load</span><span class="p">:</span><span class="mh">0x3d234c30</span><span class="p">,</span><span class="nx">len</span><span class="p">:</span><span class="o">-</span><span class="mi">1713843249</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="mi">14</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">604</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="mi">1150</span><span class="w"> </span><span class="nx">mmu</span><span class="w"> </span><span class="nx">set</span><span class="w"> </span><span class="mo">00010000</span><span class="p">,</span><span class="w"> </span><span class="nx">pos</span><span class="w"> </span><span class="mo">00010000</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="o">...</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mi">569</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">ets</span><span class="w"> </span><span class="nx">Jul</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">2019</span><span class="w"> </span><span class="mi">12</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">46</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mi">569</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mi">569</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">rst</span><span class="p">:</span><span class="mh">0x10</span><span class="w"> </span><span class="p">(</span><span class="nx">RTCWDT_RTC_RESET</span><span class="p">),</span><span class="nx">boot</span><span class="p">:</span><span class="mh">0x13</span><span class="w"> </span><span class="p">(</span><span class="nx">SPI_FAST_FLASH_BOOT</span><span class="p">)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mi">575</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">flash</span><span class="w"> </span><span class="nx">read</span><span class="w"> </span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="mi">988</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mi">579</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">ets_main</span><span class="p">.</span><span class="nx">c</span><span class="w"> </span><span class="mi">384</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">325</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">ets</span><span class="w"> </span><span class="nx">Jul</span><span class="w"> </span><span class="mi">29</span><span class="w"> </span><span class="mi">2019</span><span class="w"> </span><span class="mi">12</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span><span class="mi">46</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">325</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">325</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">rst</span><span class="p">:</span><span class="mh">0x10</span><span class="w"> </span><span class="p">(</span><span class="nx">RTCWDT_RTC_RESET</span><span class="p">),</span><span class="nx">boot</span><span class="p">:</span><span class="mh">0x13</span><span class="w"> </span><span class="p">(</span><span class="nx">SPI_FAST_FLASH_BOOT</span><span class="p">)</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">330</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">configsip</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">SPIWP</span><span class="p">:</span><span class="mh">0xee</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">333</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">clk_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">q_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">d_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">cs0_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">hd_drv</span><span class="p">:</span><span class="mh">0x00</span><span class="p">,</span><span class="nx">wp_drv</span><span class="p">:</span><span class="mh">0x00</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">338</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">mode</span><span class="p">:</span><span class="nx">DIO</span><span class="p">,</span><span class="w"> </span><span class="nx">clock</span><span class="w"> </span><span class="nx">div</span><span class="p">:</span><span class="mi">2</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">341</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">load</span><span class="p">:</span><span class="mh">0x3fff0018</span><span class="p">,</span><span class="nx">len</span><span class="p">:</span><span class="mi">4</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">344</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">load</span><span class="p">:</span><span class="mh">0x3fff001c</span><span class="p">,</span><span class="nx">len</span><span class="p">:</span><span class="mi">7960</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">347</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="nx">load</span><span class="p">:</span><span class="mh">0x3d234c30</span><span class="p">,</span><span class="nx">len</span><span class="p">:</span><span class="o">-</span><span class="mi">1713843249</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="mi">14</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mo">04</span><span class="p">:</span><span class="mi">374</span><span class="w"> </span><span class="o">-</span><span class="p">&gt;</span><span class="w"> </span><span class="mi">1150</span><span class="w"> </span><span class="nx">mmu</span><span class="w"> </span><span class="nx">set</span><span class="w"> </span><span class="mo">00010000</span><span class="p">,</span><span class="w"> </span><span class="nx">pos</span><span class="w"> </span><span class="mo">00010000</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="o">...</span>
+</code></pre></div>
+<p>There two main points of which their function is unknown:
+- IO26, IO27: The connect to an unpopulated area which holds a chip during testing (could be seen from the marker on bottom of the right side).
+  - Since
+- IO21, IO2: Could be used for selection the Boot Mode or load/start a special app since IO2 is a Strap Pin and IO21 could serve as a <a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/bootloader.html#boot-from-test-firmware">Boot from Test Firmware</a> pin</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">SPI<br>JTAG</th>
+<th style="text-align: center;">MISO<br>MTDI</th>
+<th style="text-align: center;">MOSI<br>MTCK</th>
+<th style="text-align: center;">CLK<br>MTMS</th>
+<th style="text-align: center;">CS<br>MTDO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><strong>V-SPI</strong></td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">23</td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">05</td>
+</tr>
+<tr>
+<td style="text-align: right;"><strong>H-SPI</strong></td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr>
+<td style="text-align: right;"><strong>JTAG</strong></td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">15</td>
+</tr>
+<tr>
+<td style="text-align: right;"><strong>Debug<br>Log</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">15 = High</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esp32-boot-mode-selection-and-jumper-pins">ESP32 Boot Mode Selection and Jumper PINs<a class="headerlink" href="#esp32-boot-mode-selection-and-jumper-pins" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Boot Mode Selection
+  |  PIN |  STD  | BOOT  | NORMAL | JUMPER |
+  | ---: | :---: | :---: | :----: | ------ |
+  |  IO0 |   1   |   0   |   18   | YES    |
+  |  IO2 |   0   |   0   |   14   |        |
+  | IO21 |   ?   |  13   |   14   |        |</p>
+</li>
+<li>
+<p>Jumper PINs
+  | PIN  | FUNCTION         |
+  | ---: | :--------------- |
+  | IO5  | Button 1 RST     |
+  | VP   | Button 2 PROG    |
+  | &rarr;  | &rarr;              |
+  | VN   | Jumper 1 Left    |
+  | IO34 | Jumper 2 Left    |
+  | IO35 | Jumper 3 Left    |
+  | IO23 | Jumper 4 Bottom  |
+  | IO0  | Jumper 5 Right   |
+  | &rarr;  | &rarr;              |
+  | TXD0 | Tx               |
+  | RXD0 | Rx               |
+  | IO26 | Debug 1          |
+  | IO27 | Debug 1          |
+  | IO21 | Debug 2          |
+  | IO2  | Debug 2          |
+  | IO14 | STM32 + JTAG TMS |
+  | IO15 | STM32 + JTAG     |
+  | IO18 | STM32 BOOT0      |
+  | IO4  | STM32 RESET      |</p>
+</li>
+</ul>
+<blockquote>
+<p>NOTE: Mainly used for testing. Use with caution as their meaning is unknown.</p>
+</blockquote>
+<p>| IO<strong>Debug<br>Log</strong> |     |              |             | 15 = High  |</p>
+<h2 id="led-colors">LED Colors<a class="headerlink" href="#led-colors" title="Permanent link">&para;</a></h2>
+<h3 id="kizbox-ii">Kizbox II<a class="headerlink" href="#kizbox-ii" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>The lights display the product's operating mode:</p>
+<ul>
+<li>During <em>Boot Phase</em></li>
+<li>Orange: Kizbox&reg; is booting.</li>
+<li>Red (Blinking): Updating software.</li>
+<li>Orange (Blinking): Initialization before entering standard operating mode.
+During <em>Standard Operating Mode</em></li>
+<li>Green: Kizbox&reg; is connected to the cloud.</li>
+<li>Red: Kizbox&reg; not connected to the cloud.</li>
+<li>Blue (Blinking): Kizbox&reg; is pairing (local mode).<ul>
+<li>Pressing the CFG button for 2 seconds initiates pairing to local mode.
+  If no pairing is completed within 60 seconds, the product returns to standard operating mode.</li>
+</ul>
+</li>
+<li>Blue: product is paired in local mode.<ul>
+<li>CFG Button: Short press cancels local mode pairing.</li>
+<li>If Kizbox&reg; connected to the cloud: light turns green.</li>
+<li>If Kizbox&reg; not connected to the cloud: light turns red.</li>
+</ul>
+</li>
+</ul>
+<p>Buttons allow the following interactions:</p>
+<ul>
+<li>During boot phase</li>
+<li>RST : button forces the box update when pressed during the power on phase. Use a tool to operate it.</li>
+<li>During standard operating mode</li>
+<li>CFG, RST : actions dependent on software.</li>
+</ul>
+<p>src: <a href="https://www.overkiz.com/wp-content/uploads/2018/12/NOTICE_KIZBOX_UK_WEB_8fa0.pdf">Kizbox II Operation and installation</a></p>
+</blockquote>
+<h3 id="tahoma-v1">TaHoma V1<a class="headerlink" href="#tahoma-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>@-GRÜN = Internet vorhanden</li>
+<li>@-ROT = Internet nicht vorhanden</li>
+<li>@-ORANGE/SCHWANKEND = ein Update wird heruntergeladen oder Verbindung wird hergestellt.</li>
+<li>GRÜN = Automatiken an</li>
+<li>GELB = Automatiken aus</li>
+</ul>
+<h3 id="tahoma-v2">TaHoma V2<a class="headerlink" href="#tahoma-v2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>WEISS (im Betrieb) = online</li>
+<li>GRÜN = Alarmfunktionen aktiv</li>
+<li>ROT = Alarm ausgelöst oder TaHoma-Box offline</li>
+<li>ROT blinkend = Verbindungsaufbau</li>
+</ul>
+<h3 id="tahoma-switch">TaHoma Switch<a class="headerlink" href="#tahoma-switch" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Top LEDs:</li>
+<li>WEISS blinkend = Wi-Fi Neuverbindung</li>
+<li>BLAU blinkend = Wi-Fi Einstellvorgang</li>
+<li>ROT blinkend = Wi-Fi Verbindungsabbruch</li>
+<li>ORANGE = Neustart-Anzeige</li>
+<li>GRÜN = Anzeige für die Aktivierung des Pro-Modus (nur Pro App)</li>
+<li>WEISS langsam blinkend = Szenario gestartet</li>
+<li>ROT = Szenario über Stopp-Button gestoppt</li>
+<li>Bottom LED:</li>
+<li>ROT = keine Serververbindung</li>
+<li>WEISS = online</li>
+</ul>
+<p>STM32 Tools
+minibox/usr/share/actions/fw/bootmode
+minibox/usr/share/ftdi-tools/tty-bootmode
+minibox/usr/share/image-update-functions.sh
+minibox/usr/share/stm32-utils/setmode
+minibox/usr/sbin/stm32-upgrader
+minibox/usr/bin/stm32flash
+minibox/usr/bin/stm32-helper-generic
+minibox/usr/bin/stm32-helper
+minibox/usr/bin/ncp-updater
+minibox/etc/init.d/kizbox-reset-factory
+minibox/apps/overkiz/share/rtx/scripts/fwupdate.sh
+minibox/apps/overkiz/share/io-homecontrol/scripts/fwupdate.sh
+minibox/apps/overkiz/share/idealrf/scripts/idealupdater.sh
+minibox/apps/overkiz/internal/bin/internald
+minibox/apps/overkiz/idealrf/lib/Overkiz/HomeAutomation/Protocol/IdealRF/Updater/StmUpdater.lua
+minibox/apps/overkiz/idealrf/lib/Overkiz/HomeAutomation/Protocol/IdealRF/Command/CommandManager.lua
+mainctrl/usr/lib/libanimeoHW.so.1.0.246:
+kizbox2/usr/share/stm32-utils/setmode
+kizbox2/usr/share/image-update-functions.sh
+kizbox2/usr/share/ftdi-tools/tty-bootmode
+kizbox2/usr/share/actions/fw/bootmode
+kizbox2/usr/sbin/stm32-upgrader
+kizbox2/usr/bin/stm32flash
+kizbox2/usr/bin/stm32-helper-generic
+kizbox2/usr/bin/stm32-helper
+kizbox2/usr/bin/ncp-updater
+kizbox2/apps/overkiz/share/rtx/scripts/fwupdate.sh
+kizbox2/apps/overkiz/share/io-homecontrol/scripts/fwupdate.sh
+kizbox2/apps/overkiz/lib/lua/Overkiz/knowledge/io-utils.module
+kizbox2/apps/overkiz/internal/bin/internald
+ipsensorgw/usr/lib/libanimeoHW.so.1.0.245
+ipsensorgw/usr/bin/stm32flash
+ipsensorgw/usr/bin/sensorGateway
+ipsensorgw/firmwares/sdnp/stm32-update.sh
+ipiogw/usr/lib/libanimeoHW.so.1.0.236
+ipiogw/usr/bin/stm32flash
+ipiogw/usr/bin/gateway_io</p>
+<h2 id="hardware">Hardware<a class="headerlink" href="#hardware" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Espressif ESP32-WROVER-E v2.1 Module</li>
+<li>Espressif ESP32-D0WD v3: CPU</li>
+<li>XMC XM25QH64CHIQ: ROM (8MB)</li>
+<li>Espressif ESP-PSRAM64H: RAM (8MB)</li>
+<li>Semtech SX1243 - Radio: 433 MHz (Somfy RTS, etc.)</li>
+<li>STM32F101RCT6 with 256kB ROM and 32kB RAM</li>
+<li>Silicon Labs Si4461 v2A1 - Radio: io-homecontrol</li>
+</ul>
+<blockquote>
+<p>The LED of your Connectivity kit can give you information about its status:</p>
+<ul>
+<li>Solid orange: booting phase</li>
+<li>« Breathing » blue: during WiFi change credential</li>
+<li>Flashing white: during WiFi and server connection</li>
+<li>Flashing red: Connectivity kit is either not connected to Wifi or not connected to server, you might need to check your Internet connection.</li>
+<li>Solid white: Connectivity kit is powered and connected to server, you can use it normally.</li>
+</ul>
+<p>NOTE: The LED can be turned off from the «.. » menu</p>
+</blockquote>
+<h3 id="esp32-wrover-e-board-esp32-d0wd-v3">ESP32-WROVER-E Board (ESP32-D0WD V3)<a class="headerlink" href="#esp32-wrover-e-board-esp32-d0wd-v3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">ESP32-WROVER-E board without shield</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><img alt="ESP32-WROVER-E module without shield" src="pics/Somfy-ConnectivityKit-ESP32WroverE-Front.jpg" /></td>
+</tr>
+<tr>
+<td style="text-align: center;">src: <a href="https://randomnerdtutorials.com/esp32-pinout-reference-gpios/">Dings Da Blog</a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="nor-flash-xm25qh64chiq">NOR Flash: XM25QH64CHIQ<a class="headerlink" href="#nor-flash-xm25qh64chiq" title="Permanent link">&para;</a></h4>
+<ul>
+<li>XM25 = Company Prefix + SPI Flash Family</li>
+<li>QH = Series: 2.3~3.6V, 4KB uniform-sector, Quad Mode</li>
+<li>64 = Density: 64 MBit</li>
+<li>CHI = Version: SOP 208mil 8L Package + Temp. Range: Industrial (-40 - +85°C)</li>
+<li>Q = QE Code</li>
+</ul>
+<blockquote>
+<p>NOTE: <code>QPI needs QE bit in Status Register-2 set. When QE=1, /WP =&gt; IO2 and /HOLD =&gt; IO3.</code></p>
+</blockquote>
+<p><img alt="XM25QH64C Connection Diagram" src="pics/XM25QH64C-connectionDiagram.png" /><img alt="XM25QH64C Connection Diagram" src="pics/XM25QH64C-pinOutAll.png" /></p>
+<h2 id="software">Software<a class="headerlink" href="#software" title="Permanent link">&para;</a></h2>
+<p>TBD</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago"><span class="timeago" datetime="2024-04-27T16:47:04+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-04-27</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; iown-nothing
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/MPEb7dTNdN" target="_blank" rel="noopener" title="iown-Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541ZM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241Zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://t.me/iownHomecontrol" target="_blank" rel="noopener" title="iown-Telegram" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M248 8C111.033 8 0 119.033 0 256s111.033 248 248 248 248-111.033 248-248S384.967 8 248 8Zm114.952 168.66c-3.732 39.215-19.881 134.378-28.1 178.3-3.476 18.584-10.322 24.816-16.948 25.425-14.4 1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25 5.342-39.5 3.652-3.793 67.107-61.51 68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608 69.142-14.845 10.194-26.894 9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7 18.45-13.7 108.446-47.248 144.628-62.3c68.872-28.647 83.183-33.623 92.511-33.789 2.052-.034 6.639.474 9.61 2.885a10.452 10.452 0 0 1 3.53 6.716 43.765 43.765 0 0 1 .417 9.769Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.action.edit", "header.autohide", "navigation.path", "navigation.tabs", "navigation.tabs.sticky", "navigation.tracking", "toc.follow", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.dd8806f2.min.js"></script>
+      
+        <script src="../../../js/timeago.min.js"></script>
+      
+        <script src="../../../js/timeago_mkdocs_material.js"></script>
+      
+    
+  </body>
+</html>
