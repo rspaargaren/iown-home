@@ -1,0 +1,469 @@
+# Complete Velux Roof Window (Dachfenster) Configuration for ESPHome
+# Demonstrates all Velux-specific features including:
+# - Ventilation positions (Lüftungsstellungen)
+# - Rain sensor integration
+# - Automatic rain protection
+# - Multiple window and blind control
+# - Home Assistant scenes
+
+substitutions:
+  device_name: velux-dachfenster
+  friendly_name: "Velux Dachfenster Bridge"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  platform: ESP32
+  board: heltec_wifi_lora_32_V2
+
+  platformio_options:
+    lib_deps:
+      - jgromes/RadioLib@^6.6.0
+
+# WiFi configuration
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "${device_name} Fallback"
+    password: !secret ap_password
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  password: !secret ota_password
+
+logger:
+  level: INFO
+  logs:
+    iohomecontrol: DEBUG
+    velux: VERBOSE
+
+web_server:
+  port: 80
+
+# External component
+external_components:
+  - source:
+      type: local
+      path: ../components
+    components: [iohomecontrol]
+
+# SPI for LoRa module
+spi:
+  clk_pin: GPIO5
+  miso_pin: GPIO19
+  mosi_pin: GPIO27
+
+# io-homecontrol base configuration
+iohomecontrol:
+  cs_pin: GPIO18
+  irq_pin: GPIO26
+  rst_pin: GPIO14
+
+  node_id: "0xABCDEF"
+  system_key: !secret velux_system_key
+
+  frequency: 868.95
+  mode: 1W  # Most Velux windows use 1W mode
+  verbose: true
+
+# ===========================================================================
+# VELUX ROOF WINDOWS (Dachfenster)
+# ===========================================================================
+
+cover:
+  # Main bedroom window - GGL Electric with rain sensor
+  - platform: iohomecontrol
+    name: "Schlafzimmer Dachfenster"
+    node_id: "0x646575"
+    device_type: window_opener
+    id: bedroom_window
+
+    # Velux-specific configuration
+    velux_model: GGL_ELECTRIC
+    supports_rain_sensor: true
+    rain_protection: true  # Auto-close on rain
+
+    # Home Assistant cover configuration
+    device_class: window
+
+  # Bathroom window - GGU Solar
+  - platform: iohomecontrol
+    name: "Bad Dachfenster"
+    node_id: "0x123456"
+    device_type: window_opener
+    id: bathroom_window
+
+    velux_model: GGU_SOLAR
+    supports_rain_sensor: false
+    device_class: window
+
+  # Living room window - GGL Manual with electric upgrade
+  - platform: iohomecontrol
+    name: "Wohnzimmer Dachfenster"
+    node_id: "0xABCDEF"
+    device_type: window_opener
+    id: living_window
+
+    velux_model: GGL_ELECTRIC
+    supports_rain_sensor: true
+    rain_protection: true
+    device_class: window
+
+# ===========================================================================
+# VELUX BLINDS (Rollos und Jalousien)
+# ===========================================================================
+
+  # Blackout blind (Verdunkelungsrollo)
+  - platform: iohomecontrol
+    name: "Schlafzimmer Verdunkelungsrollo"
+    node_id: "0x111111"
+    device_type: roller_shutter
+    id: bedroom_blackout
+
+    velux_model: DML
+    device_class: shade
+
+  # Roller blind (Hitzeschutzrollo)
+  - platform: iohomecontrol
+    name: "Wohnzimmer Hitzeschutzrollo"
+    node_id: "0x222222"
+    device_type: roller_shutter
+    id: living_blind
+
+    velux_model: RML
+    device_class: shade
+
+  # Exterior awning blind (Außenrollo)
+  - platform: iohomecontrol
+    name: "Außenrollo Südfenster"
+    node_id: "0x333333"
+    device_type: exterior_blind
+    id: exterior_awning
+
+    velux_model: MML
+    device_class: awning
+
+# ===========================================================================
+# SENSORS
+# ===========================================================================
+
+sensor:
+  # Rain sensor status (if supported)
+  - platform: template
+    name: "Velux Rain Sensor"
+    icon: mdi:weather-rainy
+    lambda: |-
+      // This would need implementation in the component
+      // to query rain sensor status from windows
+      return 0.0;  // 0 = dry, 1 = rain detected
+    update_interval: 30s
+
+  # Window position sensors
+  - platform: template
+    name: "Schlafzimmer Fenster Position"
+    unit_of_measurement: "%"
+    icon: mdi:window-open-variant
+    lambda: |-
+      return id(bedroom_window).current_position * 100;
+    update_interval: 5s
+
+  # RF signal quality
+  - platform: wifi_signal
+    name: "${friendly_name} WiFi Signal"
+    update_interval: 60s
+
+# Binary sensors
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Status"
+
+  # Rain detection (combines all rain sensors)
+  - platform: template
+    name: "Regen erkannt"
+    device_class: moisture
+    icon: mdi:weather-pouring
+    lambda: |-
+      // Check rain sensor status
+      // Return true if any rain sensor detects rain
+      return false;
+    filters:
+      - delayed_on: 10s    # Avoid false positives
+      - delayed_off: 300s  # Stay active for 5 min after rain stops
+
+  # Window open detection (security)
+  - platform: template
+    name: "Fenster offen (Sicherheit)"
+    device_class: window
+    icon: mdi:window-open
+    lambda: |-
+      // Check if any window is open (position > 5%)
+      return id(bedroom_window).current_position > 0.05 ||
+             id(bathroom_window).current_position > 0.05 ||
+             id(living_window).current_position > 0.05;
+
+# ===========================================================================
+# BUTTONS - Predefined Positions (Lüftungsstellungen)
+# ===========================================================================
+
+button:
+  - platform: restart
+    name: "${friendly_name} Restart"
+
+  # Ventilation Position 1 (10% - Minimal)
+  - platform: template
+    name: "Lüftungsstellung 1 (Alle Fenster)"
+    icon: mdi:window-open-variant
+    on_press:
+      - cover.control:
+          id: bedroom_window
+          position: 10%
+      - cover.control:
+          id: bathroom_window
+          position: 10%
+      - cover.control:
+          id: living_window
+          position: 10%
+
+  # Ventilation Position 2 (20% - Medium)
+  - platform: template
+    name: "Lüftungsstellung 2 (Alle Fenster)"
+    icon: mdi:window-open-variant
+    on_press:
+      - cover.control:
+          id: bedroom_window
+          position: 20%
+      - cover.control:
+          id: bathroom_window
+          position: 20%
+      - cover.control:
+          id: living_window
+          position: 20%
+
+  # Ventilation Position 3 (30% - Maximum)
+  - platform: template
+    name: "Lüftungsstellung 3 (Alle Fenster)"
+    icon: mdi:window-open-variant
+    on_press:
+      - cover.control:
+          id: bedroom_window
+          position: 30%
+      - cover.control:
+          id: bathroom_window
+          position: 30%
+      - cover.control:
+          id: living_window
+          position: 30%
+
+  # Close all windows
+  - platform: template
+    name: "Alle Fenster schließen"
+    icon: mdi:window-closed
+    on_press:
+      - cover.close: bedroom_window
+      - cover.close: bathroom_window
+      - cover.close: living_window
+
+  # Emergency close (rain protection)
+  - platform: template
+    name: "Notschließung (Regen)"
+    icon: mdi:alert
+    on_press:
+      - logger.log: "Emergency close triggered!"
+      - cover.close: bedroom_window
+      - cover.close: bathroom_window
+      - cover.close: living_window
+
+# ===========================================================================
+# SWITCHES
+# ===========================================================================
+
+switch:
+  # Rain protection toggle
+  - platform: template
+    name: "Regenschutz aktiv"
+    icon: mdi:umbrella
+    optimistic: true
+    restore_state: true
+    turn_on_action:
+      - logger.log: "Rain protection enabled"
+    turn_off_action:
+      - logger.log: "Rain protection disabled"
+
+  # Night mode (close all, open blackout)
+  - platform: template
+    name: "Nachtmodus"
+    icon: mdi:weather-night
+    optimistic: true
+    turn_on_action:
+      - logger.log: "Night mode ON"
+      - cover.close: bedroom_window
+      - cover.close: bathroom_window
+      - cover.close: living_window
+      - cover.close: bedroom_blackout
+    turn_off_action:
+      - logger.log: "Night mode OFF"
+      - cover.open: bedroom_blackout
+
+# ===========================================================================
+# TEXT SENSORS
+# ===========================================================================
+
+text_sensor:
+  - platform: version
+    name: "${friendly_name} ESPHome Version"
+
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP"
+    ssid:
+      name: "${friendly_name} SSID"
+
+  # Current mode status
+  - platform: template
+    name: "Fensterstatus"
+    icon: mdi:information-outline
+    lambda: |-
+      if (id(bedroom_window).current_position == 0 &&
+          id(bathroom_window).current_position == 0 &&
+          id(living_window).current_position == 0) {
+        return {"Alle Fenster geschlossen"};
+      } else if (id(bedroom_window).current_position <= 0.3) {
+        return {"Lüftungsmodus aktiv"};
+      } else {
+        return {"Fenster geöffnet"};
+      }
+    update_interval: 10s
+
+# ===========================================================================
+# AUTOMATIONS - Intelligent Window Control
+# ===========================================================================
+
+automation:
+  # Auto-close on rain detection
+  - id: auto_close_on_rain
+    alias: "Automatisch schließen bei Regen"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.regen_erkannt
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: switch.regenschutz_aktiv
+        state: "on"
+    action:
+      - logger.log:
+          level: WARN
+          message: "Rain detected! Closing all windows."
+      - cover.close: bedroom_window
+      - cover.close: bathroom_window
+      - cover.close: living_window
+      - delay: 30s
+      # Also close exterior blinds after windows are closed
+      - cover.close: exterior_awning
+
+  # Morning ventilation (summer mode)
+  - id: morning_ventilation
+    alias: "Morgen Lüftung (Sommer)"
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: "+00:30:00"
+    condition:
+      # Only in summer (May-September)
+      - condition: template
+        value_template: '{{ now().month >= 5 and now().month <= 9 }}'
+      # Only if not raining
+      - condition: state
+        entity_id: binary_sensor.regen_erkannt
+        state: "off"
+    action:
+      - logger.log: "Morning ventilation activated"
+      - cover.control:
+          id: bedroom_window
+          position: 20%
+      - cover.control:
+          id: bathroom_window
+          position: 30%
+
+  # Evening - close windows before sunset
+  - id: evening_close
+    alias: "Abends Fenster schließen"
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "-00:30:00"
+    action:
+      - logger.log: "Evening mode: Closing windows"
+      - cover.close: bedroom_window
+      - cover.close: bathroom_window
+      - cover.close: living_window
+      # Open blackout blinds for bedroom
+      - delay: 2min
+      - cover.close: bedroom_blackout
+
+  # Heat protection (close exterior blinds when hot)
+  - id: heat_protection
+    alias: "Hitzeschutz aktivieren"
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.outdoor_temperature  # From Home Assistant
+        above: 28
+    condition:
+      - condition: sun
+        after: sunrise
+        before: sunset
+    action:
+      - logger.log: "Heat protection: Closing exterior blinds"
+      - cover.close: exterior_awning
+      - cover.close: living_blind
+
+  # Security: Alert if windows open when leaving
+  - id: security_check
+    alias: "Sicherheitsprüfung beim Verlassen"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.home_occupied  # From Home Assistant
+        to: "off"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.fenster_offen_sicherheit
+        state: "on"
+    action:
+      - logger.log:
+          level: WARN
+          message: "Windows open while leaving home!"
+      # Send notification via Home Assistant
+      # You can also auto-close here if desired
+
+# ===========================================================================
+# CLIMATE INTEGRATION (Optional)
+# ===========================================================================
+
+# Use window position to help regulate indoor temperature
+# This requires Home Assistant climate integration
+
+# Example: Open windows if indoor temp > outdoor temp + 2°C
+script:
+  - id: smart_ventilation
+    alias: "Intelligente Lüftung"
+    then:
+      - lambda: |-
+          // This would need sensors from Home Assistant
+          // float indoor_temp = id(indoor_temperature).state;
+          // float outdoor_temp = id(outdoor_temperature).state;
+
+          // if (indoor_temp > outdoor_temp + 2.0) {
+          //   // Open windows for cooling
+          //   id(bedroom_window).make_call().set_position(0.2).perform();
+          // }
+
+# Interval to check smart ventilation
+interval:
+  - interval: 10min
+    then:
+      - script.execute: smart_ventilation
