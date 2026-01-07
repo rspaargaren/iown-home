@@ -25,7 +25,11 @@ IoHomeControl::IoHomeControl(PhysicalLayer* radio)
     rolling_code_(0),
     initialized_(false),
     receiving_(false),
-    verbose_(false)
+    verbose_(false),
+    channel_hopper_(nullptr),
+    auth_manager_(nullptr),
+    beacon_handler_(nullptr),
+    discovery_manager_(nullptr)
 {
   memset(own_node_id_, 0, NODE_ID_SIZE);
   memset(system_key_, 0, AES_KEY_SIZE);
@@ -44,6 +48,25 @@ bool IoHomeControl::begin(
   LOG_PRINTF("IoHomeControl: Initializing (%s mode)\n", is_1w ? "1W" : "2W");
   LOG_PRINTF("  Node ID: %02X %02X %02X\n",
              own_node_id_[0], own_node_id_[1], own_node_id_[2]);
+
+  // Initialize 2W components if in 2W mode
+  if (!is_1w_mode_) {
+    LOG_PRINT("Initializing 2W mode components...");
+
+    channel_hopper_ = new mode2w::ChannelHopper();
+    channel_hopper_->begin(CHANNEL_HOP_TIME_MS);
+
+    auth_manager_ = new mode2w::AuthenticationManager();
+    auth_manager_->begin(system_key_);
+
+    beacon_handler_ = new mode2w::BeaconHandler();
+    beacon_handler_->begin();
+
+    discovery_manager_ = new mode2w::DiscoveryManager();
+    discovery_manager_->begin(own_node_id_);
+
+    LOG_PRINT("2W mode components initialized");
+  }
 
   initialized_ = true;
   return true;
@@ -182,19 +205,23 @@ bool IoHomeControl::check_received(frame::IoFrame* frame, int16_t* rssi, float* 
   }
 
   // Get RSSI and SNR
+  int16_t rssi_val = radio_->getRSSI();
+  float snr_val = radio_->getSNR();
+
   if (rssi != nullptr) {
-    *rssi = radio_->getRSSI();
+    *rssi = rssi_val;
   }
   if (snr != nullptr) {
-    *snr = radio_->getSNR();
+    *snr = snr_val;
   }
 
   LOG_PRINT("Frame received successfully");
 
+  // Process frame internally (beacons, discovery, auth)
+  process_received_frame(frame, rssi_val, snr_val);
+
   // Call callback if set
   if (rx_callback_ != nullptr) {
-    int16_t rssi_val = radio_->getRSSI();
-    float snr_val = radio_->getSNR();
     rx_callback_(frame, rssi_val, snr_val);
   }
 
@@ -317,6 +344,237 @@ void IoHomeControl::log(const char* message) {
   if (verbose_) {
     LOG_PRINT(message);
   }
+}
+
+void IoHomeControl::process_received_frame(const frame::IoFrame* frame, int16_t rssi, float snr) {
+  // Process beacons if in 2W mode
+  if (!is_1w_mode_ && beacon_handler_ != nullptr) {
+    if (beacon_handler_->process_beacon(frame, rssi, snr)) {
+      LOG_PRINT("Beacon received");
+    }
+  }
+
+  // Process discovery responses
+  if (discovery_manager_ != nullptr) {
+    discovery_manager_->process_discovery_response(frame, rssi);
+  }
+
+  // Process challenge responses if waiting for one
+  if (!is_1w_mode_ && auth_manager_ != nullptr) {
+    if (frame->command_id == CMD_CHALLENGE_RESPONSE) {
+      if (auth_manager_->verify_challenge_response(frame)) {
+        LOG_PRINT("Authentication successful");
+      } else {
+        LOG_PRINT("Authentication failed");
+      }
+    }
+  }
+}
+
+// ============================================================================
+// 2W Mode Features Implementation
+// ============================================================================
+
+bool IoHomeControl::enable_frequency_hopping(bool enable) {
+  if (is_1w_mode_) {
+    LOG_PRINT("Warning: Frequency hopping only available in 2W mode");
+    return false;
+  }
+
+  if (channel_hopper_ == nullptr) {
+    LOG_PRINT("Error: Channel hopper not initialized");
+    return false;
+  }
+
+  channel_hopper_->set_enabled(enable);
+  LOG_PRINTF("Frequency hopping %s\n", enable ? "enabled" : "disabled");
+  return true;
+}
+
+bool IoHomeControl::update_frequency_hopping() {
+  if (is_1w_mode_ || channel_hopper_ == nullptr || !channel_hopper_->is_enabled()) {
+    return false;
+  }
+
+#ifdef ARDUINO
+  unsigned long current_time = millis();
+#else
+  unsigned long current_time = GET_TIME_MS();
+#endif
+
+  if (channel_hopper_->update(current_time)) {
+    // Channel switched, reconfigure radio
+    float new_freq = channel_hopper_->get_current_frequency();
+    int16_t state = radio_->setFrequency(new_freq);
+
+    if (state == RADIOLIB_ERR_NONE) {
+      LOG_PRINTF("Switched to channel: %.2f MHz\n", new_freq);
+      return true;
+    } else {
+      LOG_PRINTF("Error: Failed to switch channel (%d)\n", state);
+      return false;
+    }
+  }
+
+  return false;
+}
+
+mode2w::ChannelState IoHomeControl::get_current_channel() const {
+  if (channel_hopper_ == nullptr) {
+    return mode2w::ChannelState::CHANNEL_2;
+  }
+  return channel_hopper_->get_current_channel();
+}
+
+bool IoHomeControl::send_challenge_request(const uint8_t dest_node[NODE_ID_SIZE]) {
+  if (is_1w_mode_) {
+    LOG_PRINT("Error: Challenge-response only available in 2W mode");
+    return false;
+  }
+
+  if (auth_manager_ == nullptr) {
+    LOG_PRINT("Error: Authentication manager not initialized");
+    return false;
+  }
+
+  frame::IoFrame frame;
+  if (!auth_manager_->create_challenge_request(&frame, dest_node, own_node_id_)) {
+    LOG_PRINT("Error: Failed to create challenge request");
+    return false;
+  }
+
+  LOG_PRINT("Sending challenge request");
+  return transmit_frame(&frame);
+}
+
+bool IoHomeControl::send_challenge_response(const uint8_t dest_node[NODE_ID_SIZE], const uint8_t challenge[HMAC_SIZE]) {
+  if (is_1w_mode_) {
+    LOG_PRINT("Error: Challenge-response only available in 2W mode");
+    return false;
+  }
+
+  if (auth_manager_ == nullptr) {
+    LOG_PRINT("Error: Authentication manager not initialized");
+    return false;
+  }
+
+  frame::IoFrame frame;
+  if (!auth_manager_->create_challenge_response(&frame, dest_node, own_node_id_, challenge)) {
+    LOG_PRINT("Error: Failed to create challenge response");
+    return false;
+  }
+
+  LOG_PRINT("Sending challenge response");
+  return transmit_frame(&frame);
+}
+
+mode2w::ChallengeState IoHomeControl::get_auth_state() const {
+  if (auth_manager_ == nullptr) {
+    return mode2w::ChallengeState::IDLE;
+  }
+  return auth_manager_->get_state();
+}
+
+void IoHomeControl::start_discovery(uint8_t device_type, unsigned long timeout_ms) {
+  if (discovery_manager_ == nullptr) {
+    discovery_manager_ = new mode2w::DiscoveryManager();
+    discovery_manager_->begin(own_node_id_);
+  }
+
+  LOG_PRINTF("Starting discovery (device type: 0x%02X, timeout: %lu ms)\n", device_type, timeout_ms);
+  discovery_manager_->start_discovery(device_type, timeout_ms);
+
+  // Send discovery request
+  frame::IoFrame frame;
+  if (discovery_manager_->create_discovery_request(&frame, device_type)) {
+    // Note: Discovery doesn't use encryption
+    transmit_frame(&frame);
+  }
+}
+
+void IoHomeControl::stop_discovery() {
+  if (discovery_manager_ != nullptr) {
+    discovery_manager_->stop_discovery();
+    LOG_PRINT("Discovery stopped");
+  }
+}
+
+size_t IoHomeControl::get_discovered_count() const {
+  if (discovery_manager_ == nullptr) {
+    return 0;
+  }
+  return discovery_manager_->get_discovered_count();
+}
+
+bool IoHomeControl::get_discovered_device(size_t index, mode2w::DiscoveredDevice* device) {
+  if (discovery_manager_ == nullptr) {
+    return false;
+  }
+  return discovery_manager_->get_discovered_device(index, device);
+}
+
+bool IoHomeControl::pair_device_1w(const uint8_t dest_node[NODE_ID_SIZE], const uint8_t new_system_key[AES_KEY_SIZE]) {
+  if (discovery_manager_ == nullptr) {
+    discovery_manager_ = new mode2w::DiscoveryManager();
+    discovery_manager_->begin(own_node_id_);
+  }
+
+  LOG_PRINT("Pairing device (1W mode)");
+
+  frame::IoFrame frame;
+  if (!discovery_manager_->create_key_transfer_1w(&frame, dest_node, own_node_id_, new_system_key)) {
+    LOG_PRINT("Error: Failed to create key transfer frame");
+    return false;
+  }
+
+  // Finalize frame without existing key (using transfer key)
+  if (!frame::finalize_frame(&frame, TRANSFER_KEY)) {
+    LOG_PRINT("Error: Failed to finalize key transfer frame");
+    return false;
+  }
+
+  return transmit_frame(&frame);
+}
+
+bool IoHomeControl::pair_device_2w(const uint8_t dest_node[NODE_ID_SIZE], const uint8_t new_system_key[AES_KEY_SIZE]) {
+  if (!auth_manager_ || discovery_manager_ == nullptr) {
+    LOG_PRINT("Error: 2W components not initialized");
+    return false;
+  }
+
+  LOG_PRINT("Pairing device (2W mode)");
+
+  // Generate challenge
+  uint8_t challenge[HMAC_SIZE];
+  auth_manager_->generate_challenge(challenge);
+
+  frame::IoFrame frame;
+  if (!discovery_manager_->create_key_transfer_2w(&frame, dest_node, own_node_id_, new_system_key, challenge)) {
+    LOG_PRINT("Error: Failed to create key transfer frame");
+    return false;
+  }
+
+  // Finalize frame with challenge
+  if (!frame::finalize_frame(&frame, TRANSFER_KEY, challenge)) {
+    LOG_PRINT("Error: Failed to finalize key transfer frame");
+    return false;
+  }
+
+  return transmit_frame(&frame);
+}
+
+bool IoHomeControl::has_recent_beacon(unsigned long timeout_ms) {
+  if (beacon_handler_ == nullptr) {
+    return false;
+  }
+  return beacon_handler_->has_recent_beacon(timeout_ms);
+}
+
+bool IoHomeControl::get_last_beacon(mode2w::BeaconInfo* info) {
+  if (beacon_handler_ == nullptr) {
+    return false;
+  }
+  return beacon_handler_->get_last_beacon(info);
 }
 
 } // namespace iohome

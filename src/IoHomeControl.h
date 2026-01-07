@@ -13,6 +13,7 @@
 #include "protocol/iohome_constants.h"
 #include "protocol/iohome_crypto.h"
 #include "protocol/iohome_frame.h"
+#include "protocol/iohome_2w.h"
 
 namespace iohome {
 
@@ -169,6 +170,119 @@ public:
    */
   void set_verbose(bool enable) { verbose_ = enable; }
 
+  // ========================================================================
+  // 2W Mode Features
+  // ========================================================================
+
+  /**
+   * @brief Enable frequency hopping (2W mode only)
+   *
+   * @param enable true to enable, false to disable
+   * @return true on success
+   */
+  bool enable_frequency_hopping(bool enable = true);
+
+  /**
+   * @brief Update frequency hopping state (call in loop for 2W mode)
+   *
+   * @return true if channel was switched
+   */
+  bool update_frequency_hopping();
+
+  /**
+   * @brief Get current channel (2W mode)
+   *
+   * @return Current ChannelState
+   */
+  mode2w::ChannelState get_current_channel() const;
+
+  /**
+   * @brief Send challenge request (2W mode)
+   *
+   * @param dest_node Destination node ID (3 bytes)
+   * @return true on success
+   */
+  bool send_challenge_request(const uint8_t dest_node[NODE_ID_SIZE]);
+
+  /**
+   * @brief Send challenge response (2W mode)
+   *
+   * @param dest_node Destination node ID (3 bytes)
+   * @param challenge Challenge from request (6 bytes)
+   * @return true on success
+   */
+  bool send_challenge_response(const uint8_t dest_node[NODE_ID_SIZE], const uint8_t challenge[HMAC_SIZE]);
+
+  /**
+   * @brief Get authentication state (2W mode)
+   *
+   * @return Current ChallengeState
+   */
+  mode2w::ChallengeState get_auth_state() const;
+
+  /**
+   * @brief Start device discovery
+   *
+   * @param device_type Type of device to discover (0xFF for all)
+   * @param timeout_ms Discovery timeout in milliseconds
+   */
+  void start_discovery(uint8_t device_type = 0xFF, unsigned long timeout_ms = 10000);
+
+  /**
+   * @brief Stop device discovery
+   */
+  void stop_discovery();
+
+  /**
+   * @brief Get number of discovered devices
+   *
+   * @return Number of devices found
+   */
+  size_t get_discovered_count() const;
+
+  /**
+   * @brief Get discovered device by index
+   *
+   * @param index Device index (0 to count-1)
+   * @param device Output DiscoveredDevice structure
+   * @return true if device exists
+   */
+  bool get_discovered_device(size_t index, mode2w::DiscoveredDevice* device);
+
+  /**
+   * @brief Pair device with key transfer (1W mode)
+   *
+   * @param dest_node Target device node ID (3 bytes)
+   * @param new_system_key System key to program (16 bytes)
+   * @return true on success
+   */
+  bool pair_device_1w(const uint8_t dest_node[NODE_ID_SIZE], const uint8_t new_system_key[AES_KEY_SIZE]);
+
+  /**
+   * @brief Pair device with key transfer (2W mode)
+   *
+   * @param dest_node Target device node ID (3 bytes)
+   * @param new_system_key System key to program (16 bytes)
+   * @return true on success
+   */
+  bool pair_device_2w(const uint8_t dest_node[NODE_ID_SIZE], const uint8_t new_system_key[AES_KEY_SIZE]);
+
+  /**
+   * @brief Check if last beacon was recent (2W mode)
+   *
+   * @param timeout_ms Timeout in milliseconds
+   * @return true if recent beacon exists
+   */
+  bool has_recent_beacon(unsigned long timeout_ms = 5000);
+
+  /**
+   * @brief Get last beacon information (2W mode)
+   *
+   * @param info Output BeaconInfo structure
+   * @return true if beacon info is available
+   */
+  bool get_last_beacon(mode2w::BeaconInfo* info);
+
 protected:
   PhysicalLayer* radio_;
   FrameReceivedCallback rx_callback_;
@@ -181,6 +295,12 @@ protected:
   bool initialized_;
   bool receiving_;
   bool verbose_;
+
+  // 2W Mode Components
+  mode2w::ChannelHopper* channel_hopper_;
+  mode2w::AuthenticationManager* auth_manager_;
+  mode2w::BeaconHandler* beacon_handler_;
+  mode2w::DiscoveryManager* discovery_manager_;
 
   /**
    * @brief Transmit a frame
@@ -196,6 +316,15 @@ protected:
    * @param message Message to log
    */
   void log(const char* message);
+
+  /**
+   * @brief Process received frame (internal)
+   *
+   * @param frame Received frame
+   * @param rssi RSSI value
+   * @param snr SNR value
+   */
+  void process_received_frame(const frame::IoFrame* frame, int16_t rssi, float snr);
 };
 
 } // namespace iohome

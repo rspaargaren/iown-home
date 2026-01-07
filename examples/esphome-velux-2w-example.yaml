@@ -1,0 +1,341 @@
+# Example ESPHome configuration for io-homecontrol 2W Mode
+# Demonstrates advanced features like frequency hopping, challenge-response,
+# device discovery, and pairing workflow
+
+substitutions:
+  device_name: velux-bridge-2w
+  friendly_name: "Velux Bridge 2W"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  platform: ESP32
+  board: heltec_wifi_lora_32_V2
+
+  platformio_options:
+    lib_deps:
+      - jgromes/RadioLib@^6.6.0
+
+# WiFi configuration
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "${device_name} Fallback"
+    password: !secret ap_password
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  password: !secret ota_password
+
+logger:
+  level: DEBUG
+  logs:
+    iohomecontrol: VERBOSE
+    iohomecontrol.cover: DEBUG
+
+web_server:
+  port: 80
+
+# External component
+external_components:
+  - source:
+      type: local
+      path: ../components
+    components: [iohomecontrol]
+
+# SPI configuration
+spi:
+  clk_pin: GPIO5
+  miso_pin: GPIO19
+  mosi_pin: GPIO27
+
+# io-homecontrol component in 2W mode
+iohomecontrol:
+  cs_pin: GPIO18
+  irq_pin: GPIO26
+  rst_pin: GPIO14
+
+  node_id: "0xABCDEF"
+  system_key: "E994BACFE6BED7667630EAE475BAAE95"
+
+  # 2W MODE CONFIGURATION
+  mode: 2W
+
+  # Start with primary channel, hopping enabled
+  frequency: 868.95
+
+  # Enable frequency hopping (3 channels: 868.25, 868.95, 869.85 MHz)
+  frequency_hopping: true
+  hop_interval: 2.7  # milliseconds
+
+  verbose: true
+
+# Cover entities (2W mode)
+cover:
+  # Example: 2W device with position feedback
+  - platform: iohomecontrol
+    name: "Dachfenster Premium (2W)"
+    node_id: "0x646575"
+    device_type: window_opener
+    mode: 2W
+    id: bedroom_window_2w
+
+    # 2W devices can report position
+    assumed_state: false
+
+    # Optional: Require authentication before commands
+    require_auth: true
+
+  # Example: 2W actuator with tilt support
+  - platform: iohomecontrol
+    name: "Venetian Blind (2W)"
+    node_id: "0x123456"
+    device_type: venetian_blind
+    mode: 2W
+    supports_tilt: true
+    id: venetian_blind_2w
+
+# Advanced 2W features accessible via services
+
+# Service to discover devices
+service:
+  - name: discover_devices
+    description: "Discover io-homecontrol devices"
+    variables:
+      device_type:
+        description: "Device type to discover (0xFF for all)"
+        default: 0xFF
+      timeout:
+        description: "Discovery timeout in milliseconds"
+        default: 10000
+    then:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+          controller->start_discovery(device_type, timeout);
+          ESP_LOGI("service", "Discovery started");
+
+  - name: pair_device
+    description: "Pair a new device with key transfer"
+    variables:
+      node_id:
+        description: "Target device node ID (hex string)"
+      system_key:
+        description: "System key to program (hex string)"
+      mode_2w:
+        description: "Use 2W pairing (true) or 1W pairing (false)"
+        default: true
+    then:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+
+          // Parse node ID
+          uint8_t node[3];
+          sscanf(node_id.c_str(), "%02hhx%02hhx%02hhx",
+                 &node[0], &node[1], &node[2]);
+
+          // Parse system key
+          uint8_t key[16];
+          sscanf(system_key.c_str(),
+                 "%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx"
+                 "%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx",
+                 &key[0], &key[1], &key[2], &key[3],
+                 &key[4], &key[5], &key[6], &key[7],
+                 &key[8], &key[9], &key[10], &key[11],
+                 &key[12], &key[13], &key[14], &key[15]);
+
+          bool success;
+          if (mode_2w) {
+            success = controller->pair_device_2w(node, key);
+          } else {
+            success = controller->pair_device_1w(node, key);
+          }
+
+          if (success) {
+            ESP_LOGI("service", "Pairing initiated");
+          } else {
+            ESP_LOGE("service", "Pairing failed");
+          }
+
+  - name: send_challenge
+    description: "Send challenge request for authentication"
+    variables:
+      node_id:
+        description: "Target device node ID (hex string)"
+    then:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+
+          uint8_t node[3];
+          sscanf(node_id.c_str(), "%02hhx%02hhx%02hhx",
+                 &node[0], &node[1], &node[2]);
+
+          if (controller->send_challenge_request(node)) {
+            ESP_LOGI("service", "Challenge request sent");
+          } else {
+            ESP_LOGE("service", "Failed to send challenge");
+          }
+
+# Sensors for 2W status
+sensor:
+  # Current RF channel
+  - platform: template
+    name: "Current Channel"
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      auto channel = controller->get_current_channel();
+      return static_cast<float>(channel);
+    update_interval: 1s
+
+  # Number of discovered devices
+  - platform: template
+    name: "Discovered Devices"
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      return controller->get_discovered_count();
+    update_interval: 5s
+
+  # RSSI
+  - platform: template
+    name: "RF Signal Strength"
+    unit_of_measurement: "dBm"
+    device_class: signal_strength
+    state_class: measurement
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      return controller->get_rssi();
+    update_interval: 30s
+
+# Binary sensors for 2W status
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Status"
+
+  # Authentication status
+  - platform: template
+    name: "2W Authenticated"
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      return controller->get_auth_state() ==
+             iohome::mode2w::ChallengeState::AUTHENTICATED;
+    update_interval: 1s
+
+  # Beacon status
+  - platform: template
+    name: "Beacon Received"
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      return controller->has_recent_beacon(5000);
+    update_interval: 1s
+    device_class: connectivity
+
+# Text sensors
+text_sensor:
+  - platform: version
+    name: "${friendly_name} ESPHome Version"
+
+  - platform: wifi_info
+    ip_address:
+      name: "${friendly_name} IP"
+    ssid:
+      name: "${friendly_name} SSID"
+
+  # Discovered devices list
+  - platform: template
+    name: "Discovered Devices List"
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      std::string devices = "";
+
+      for (size_t i = 0; i < controller->get_discovered_count(); i++) {
+        iohome::mode2w::DiscoveredDevice device;
+        if (controller->get_discovered_device(i, &device)) {
+          char buf[32];
+          snprintf(buf, sizeof(buf), "%02X%02X%02X (Type: %02X) ",
+                   device.node_id[0], device.node_id[1], device.node_id[2],
+                   static_cast<uint8_t>(device.device_type));
+          devices += buf;
+        }
+      }
+
+      return devices.empty() ? "None" : devices;
+    update_interval: 10s
+
+# Switches
+switch:
+  # Frequency hopping control
+  - platform: template
+    name: "Frequency Hopping"
+    optimistic: false
+    lambda: |-
+      auto controller = id(iohomecontrol_component).get_controller();
+      // Return hopping state (implementation needed in controller)
+      return true;
+    turn_on_action:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+          controller->enable_frequency_hopping(true);
+          ESP_LOGI("switch", "Frequency hopping enabled");
+    turn_off_action:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+          controller->enable_frequency_hopping(false);
+          ESP_LOGI("switch", "Frequency hopping disabled");
+
+# Buttons
+button:
+  - platform: restart
+    name: "${friendly_name} Restart"
+
+  # Start discovery
+  - platform: template
+    name: "Start Discovery"
+    on_press:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+          controller->start_discovery(0xFF, 10000);
+          ESP_LOGI("button", "Discovery started");
+
+  # Stop discovery
+  - platform: template
+    name: "Stop Discovery"
+    on_press:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+          controller->stop_discovery();
+          ESP_LOGI("button", "Discovery stopped");
+
+# Example automations
+automation:
+  # Automatically authenticate with devices on boot
+  - id: auto_auth_on_boot
+    alias: "Authenticate on boot"
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - delay: 5s
+      - logger.log: "Sending authentication challenges..."
+      # Add your specific devices here
+
+  # React to beacon reception
+  - id: beacon_received
+    alias: "Handle beacon"
+    trigger:
+      - platform: template
+        value_template: "{{ is_state('binary_sensor.beacon_received', 'on') }}"
+    action:
+      - logger.log: "Beacon detected from system"
+
+# Interval for channel hopping update (called in loop)
+interval:
+  - interval: 1ms  # Very frequent for precise 2.7ms timing
+    then:
+      - lambda: |-
+          auto controller = id(iohomecontrol_component).get_controller();
+          controller->update_frequency_hopping();
