@@ -9,13 +9,16 @@ substitutions:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
-  platform: ESP32
-  board: heltec_wifi_lora_32_V2
 
   # Platform-specific configuration
   platformio_options:
     lib_deps:
       - jgromes/RadioLib@^6.6.0
+
+esp32:
+  board: heltec_wifi_lora_32_V3
+  framework:
+    type: arduino
 
 # WiFi configuration
 wifi:
@@ -39,9 +42,9 @@ ota:
 # Enable logging
 logger:
   level: DEBUG
-  logs:
-    iohomecontrol: VERBOSE
-    iohomecontrol.cover: DEBUG
+  # logs:
+  #   iohomecontrol: VERBOSE
+  #   iohomecontrol.cover: DEBUG
 
 # Enable web server for diagnostics
 web_server:
@@ -49,10 +52,7 @@ web_server:
 
 # External component (use local path during development)
 external_components:
-  - source:
-      type: local
-      path: ../components
-    components: [iohomecontrol]
+  - source: ../components
 
 # SPI configuration (required for LoRa module)
 spi:

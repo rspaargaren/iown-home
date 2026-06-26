@@ -48,7 +48,6 @@ __pycache__/
 
 ### MacOS ###
 ._*
-_*
 .DS_Store
 *.icloud
 
@@ -90,3 +89,6 @@ $RECYCLE.BIN/
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator-enh.xml
 .idea/**/markdown-navigator/
+
+# esphome
+secrets.yaml
