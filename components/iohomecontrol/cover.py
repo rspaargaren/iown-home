@@ -36,7 +36,7 @@ IoHomeControlCover = iohomecontrol_ns.class_(
     "IoHomeControlCover", cover.Cover, cg.Component
 )
 
-CONFIG_SCHEMA = cover.COVER_SCHEMA.extend(
+CONFIG_SCHEMA = cover._COVER_SCHEMA.extend(
     {
         cv.GenerateID(): cv.declare_id(IoHomeControlCover),
         cv.GenerateID(CONF_IOHOMECONTROL_ID): cv.use_id(IoHomeControl),
